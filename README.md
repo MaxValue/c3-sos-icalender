@@ -13,6 +13,7 @@ At the moment, the Self Organized Sessions cannot be viewed directly in the Fahr
 
 ## How to install it
 - [Via iCloud](https://www.icloud.com/shortcuts/acde3f799de84800aa08de88491b71f5)
+- [Via RoutineHub](https://routinehub.co/shortcut/21421/)
 - by downloading the the binary Shortcut file from Apple
     1. [Go to the JSON-description page of the shortcut](https://www.icloud.com/shortcuts/api/records/acde3f799de84800aa08de88491b71f5)
     2. Find the key "fields.shortcut.value.downloadURL" and download that URL
