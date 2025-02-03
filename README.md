@@ -83,7 +83,7 @@ completion({
 ## Authors
 * **Max Fuxjäger** - *Initial work* - [MaxValue](https://gitlab.com/MaxValue)
 
-See also the list of [contributors](https://gitlab.com/MaxValue/stringtheory/-/graphs/main?ref_type=heads) who participated in this project.
+See also the list of [contributors](https://gitlab.com/MaxValue/c3-sos-icalender/-/graphs/main?ref_type=heads) who participated in this project.
 
 ## Project History
 I was asked just before 38C3 to create a macro or similar to add SOS to the calendar. At that time I thought it had to be made with ics files and got lost. Some time after 38C3 i needed something to procrastinate with so I finally implemented this Shortcut.
