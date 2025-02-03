@@ -1,0 +1,414 @@
+{
+    "WFWorkflowHasShortcutInputVariables": true,
+    "WFWorkflowMinimumClientVersionString": "1113",
+    "WFWorkflowMinimumClientVersion": 1113,
+    "WFWorkflowIcon": {
+        "WFWorkflowIconStartColor": 4251333119,
+        "WFWorkflowIconGlyphNumber": 59822
+    },
+    "WFWorkflowClientVersion": "3107.0.10",
+    "WFWorkflowOutputContentItemClasses": [],
+    "WFWorkflowHasOutputFallback": false,
+    "WFWorkflowActions": [
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.gettext",
+            "WFWorkflowActionParameters": {
+                "UUID": "C3854AAE-9EB7-494C-95D7-645E2CA8F789",
+                "CustomOutputName": "Calendar Name",
+                "WFTextActionText": "Personal"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getitemfromlist",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "Type": "ExtensionInput"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "3E68342E-88C3-4C68-9785-6847A8CA0A11",
+                "WFItemSpecifier": "Last Item"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getitemtype",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "3E68342E-88C3-4C68-9785-6847A8CA0A11",
+                        "Type": "ActionOutput",
+                        "OutputName": "Item from List"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "2B170B6D-D852-4C89-A40F-26B3C8BBE733"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.conditional",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Type": "Variable",
+                    "Variable": {
+                        "Value": {
+                            "OutputUUID": "2B170B6D-D852-4C89-A40F-26B3C8BBE733",
+                            "Type": "ActionOutput",
+                            "OutputName": "Type"
+                        },
+                        "WFSerializationType": "WFTextTokenAttachment"
+                    }
+                },
+                "WFControlFlowMode": 0,
+                "WFConditionalActionString": "URL",
+                "GroupingIdentifier": "1EF97ADD-6EF6-42C3-9417-62F99E0B2711",
+                "WFCondition": 4
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.openurl",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "string": "x-safari-￼",
+                        "attachmentsByRange": {
+                            "{9, 1}": {
+                                "OutputUUID": "3E68342E-88C3-4C68-9785-6847A8CA0A11",
+                                "Type": "ActionOutput",
+                                "OutputName": "Item from List"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                },
+                "UUID": "51A7A3FE-E963-4153-852A-8957B61CB67E"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.alert",
+            "WFWorkflowActionParameters": {
+                "WFAlertActionMessage": "Please use this Shortcut via Safari",
+                "WFAlertActionTitle": "Apple is uncool",
+                "WFAlertActionCancelButtonShown": false
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.exit",
+            "WFWorkflowActionParameters": {}
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.conditional",
+            "WFWorkflowActionParameters": {
+                "GroupingIdentifier": "1EF97ADD-6EF6-42C3-9417-62F99E0B2711",
+                "WFControlFlowMode": 1
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.conditional",
+            "WFWorkflowActionParameters": {
+                "WFControlFlowMode": 2,
+                "GroupingIdentifier": "1EF97ADD-6EF6-42C3-9417-62F99E0B2711",
+                "UUID": "26F299F6-E70B-4AE4-B274-47F95E6C62A7"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.runjavascriptonwebpage",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "Type": "ExtensionInput"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "WFJavaScript": "\/\/ get starting time\nvar timeStartStr = document.querySelector(\".hub-event-details__time\").childNodes[0].nodeValue.trim();\n\n\/\/ get ending time\nvar timeEndStr = document.querySelector(\".hub-event-details__time\").childNodes[4].nodeValue.trim();\n\n\/\/ get day number\nvar dayStr = document.querySelector(\".hub-event-details__day\").textContent;\nvar day = parseInt(dayStr.replace(\/^(Day|Tag) \/i, \"\"));\n\n\/\/ determine current year\nvar currentYear = parseInt(document.location.pathname.replace(\/^\\\/congress\\\/([0-9]{4})\\\/\/i,\"$1\"));\n\n\/\/ build date from day 0 + event day\nvar dateStart = new Date(`${currentYear}-12-26T00:00:00.000+01:00`);\ndateStart.setDate(dateStart.getDate() + day);\nvar dateEnd = new Date(dateStart);\n\n\/\/ change times of start date to actual starting time\nvar timeStartSplit = timeStartStr.split(\":\");\ndateStart.setHours(timeStartSplit[0]);\ndateStart.setMinutes(timeStartSplit[1]);\n\n\/\/ change times of end date to actual ending time\nvar timeEndSplit = timeEndStr.split(\":\");\ndateEnd.setHours(timeEndSplit[0]);\ndateEnd.setMinutes(timeEndSplit[1]);\n\n\/\/ get event title\nvar title = document.querySelector(\".hub-head-main\").textContent.trim();\n\n\/\/ get event location\nvar location = document.querySelector(\"main.container.hub-content > article > div.hub-vlayout > div.hub-row.hub-card > div.hub-vlayout-l > div > h2.hub-section-title + div.hub-text\").textContent.trim();\n\n\/\/ get event description\nvar description = document.querySelector(\"main.container.hub-content > article > div.hub-vlayout > div.hub-row.hub-card > div.hub-vlayout-l > div.hub-text > section.hub-markdown\").textContent.trim();\n\n\/\/ return data to shortcut\ncompletion({\n    \"title\": title,\n    \"location\": location,\n    \"start\": dateStart.toUTCString(),\n    \"end\": dateEnd.toUTCString(),\n    \"url\": document.location.href,\n    \"notes\": description\n});",
+                "UUID": "1CE6683D-543A-4D20-A465-0FD105386C55"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.detect.dictionary",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "1CE6683D-543A-4D20-A465-0FD105386C55",
+                        "Type": "ActionOutput",
+                        "OutputName": "JavaScript Result"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getvalueforkey",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "5BC1BB4C-2475-46E6-87A7-DF665EA013FB",
+                "WFDictionaryKey": "start"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.detect.date",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "5BC1BB4C-2475-46E6-87A7-DF665EA013FB",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary Value"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "CustomOutputName": "Start Time",
+                "UUID": "3E8BD141-151D-42B0-A4BB-B847F7AA3287"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getvalueforkey",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "18880018-20A7-46A5-AAA3-E8C7ADBA4505",
+                "WFDictionaryKey": "end"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.detect.date",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "18880018-20A7-46A5-AAA3-E8C7ADBA4505",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary Value"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "CustomOutputName": "End Time",
+                "UUID": "48ACFE0D-0F12-409B-A5F2-DA39727A726B"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getvalueforkey",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "CustomOutputName": "Title",
+                "UUID": "B22629E9-7520-46B6-A0E6-4988434DED32",
+                "WFDictionaryKey": "title"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getvalueforkey",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "CustomOutputName": "Location",
+                "UUID": "82F2F1D7-EDE8-4497-AB86-C82C4D021995",
+                "WFDictionaryKey": "location"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getvalueforkey",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "8ADFC18C-3D6D-4F4C-B129-27F65BD6104B",
+                "WFDictionaryKey": "url"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.getvalueforkey",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F799C941-64F9-4B99-BDDD-D9BC65357A63",
+                        "Type": "ActionOutput",
+                        "OutputName": "Dictionary"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "CustomOutputName": "Notes",
+                "UUID": "23D5CFA8-387D-45A2-B442-E5B4176EBCA6",
+                "WFDictionaryKey": "notes"
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.addnewevent",
+            "WFWorkflowActionParameters": {
+                "WFCalendarItemTitle": {
+                    "Value": {
+                        "string": "￼",
+                        "attachmentsByRange": {
+                            "{0, 1}": {
+                                "OutputUUID": "B22629E9-7520-46B6-A0E6-4988434DED32",
+                                "Type": "ActionOutput",
+                                "OutputName": "Title"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                },
+                "WFAlertTime": "15 minutes before",
+                "WFCalendarItemNotes": {
+                    "Value": {
+                        "string": "￼",
+                        "attachmentsByRange": {
+                            "{0, 1}": {
+                                "OutputUUID": "23D5CFA8-387D-45A2-B442-E5B4176EBCA6",
+                                "Type": "ActionOutput",
+                                "OutputName": "Notes"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                },
+                "WFCalendarDescriptor": {
+                    "Value": {
+                        "OutputUUID": "C3854AAE-9EB7-494C-95D7-645E2CA8F789",
+                        "Type": "ActionOutput",
+                        "OutputName": "Calendar Name"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "UUID": "F103F2CE-6FDE-4020-A6D1-CCA05A0DEB56",
+                "WFCalendarItemLocation": {
+                    "Value": {
+                        "string": "￼",
+                        "attachmentsByRange": {
+                            "{0, 1}": {
+                                "OutputUUID": "82F2F1D7-EDE8-4497-AB86-C82C4D021995",
+                                "Type": "ActionOutput",
+                                "OutputName": "Location"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                },
+                "WFCalendarItemEndDate": {
+                    "Value": {
+                        "string": "￼",
+                        "attachmentsByRange": {
+                            "{0, 1}": {
+                                "OutputUUID": "48ACFE0D-0F12-409B-A5F2-DA39727A726B",
+                                "Type": "ActionOutput",
+                                "OutputName": "End Time"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                },
+                "WFCalendarItemStartDate": {
+                    "Value": {
+                        "string": "￼",
+                        "attachmentsByRange": {
+                            "{0, 1}": {
+                                "OutputUUID": "3E8BD141-151D-42B0-A4BB-B847F7AA3287",
+                                "Type": "ActionOutput",
+                                "OutputName": "Start Time"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                },
+                "ShowWhenRun": false
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.setters.calendarevents",
+            "WFWorkflowActionParameters": {
+                "WFInput": {
+                    "Value": {
+                        "OutputUUID": "F103F2CE-6FDE-4020-A6D1-CCA05A0DEB56",
+                        "Type": "ActionOutput",
+                        "OutputName": "New Event"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                },
+                "WFContentItemPropertyName": "URL",
+                "Mode": "Set",
+                "UUID": "55EFA017-335A-4BC1-9B94-D507475137B4",
+                "WFCalendarEventContentItemURL": {
+                    "Value": {
+                        "string": "￼",
+                        "attachmentsByRange": {
+                            "{0, 1}": {
+                                "OutputUUID": "8ADFC18C-3D6D-4F4C-B129-27F65BD6104B",
+                                "Type": "ActionOutput",
+                                "OutputName": "Dictionary Value"
+                            }
+                        }
+                    },
+                    "WFSerializationType": "WFTextTokenString"
+                }
+            }
+        },
+        {
+            "WFWorkflowActionIdentifier": "is.workflow.actions.showincalendar",
+            "WFWorkflowActionParameters": {
+                "WFEvent": {
+                    "Value": {
+                        "OutputUUID": "55EFA017-335A-4BC1-9B94-D507475137B4",
+                        "Type": "ActionOutput",
+                        "OutputName": "Edited Calendar event"
+                    },
+                    "WFSerializationType": "WFTextTokenAttachment"
+                }
+            }
+        }
+    ],
+    "WFWorkflowNoInputBehavior": {
+        "Name": "WFWorkflowNoInputBehaviorShowError",
+        "Parameters": {
+            "Error": "No Input given"
+        }
+    },
+    "WFWorkflowInputContentItemClasses": [
+        "WFAppContentItem",
+        "WFArticleContentItem",
+        "WFSafariWebPageContentItem",
+        "WFURLContentItem"
+    ],
+    "WFWorkflowIsDisabledOnLockScreen": true,
+    "WFQuickActionSurfaces": [],
+    "WFWorkflowImportQuestions": [
+        {
+            "ParameterKey": "WFTextActionText",
+            "Category": "Parameter",
+            "ActionIndex": 0,
+            "Text": "Default Calendar Name",
+            "DefaultValue": "Personal"
+        }
+    ],
+    "WFWorkflowTypes": [
+        "ActionExtension"
+    ]
+}
